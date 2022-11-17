@@ -121,28 +121,26 @@ async function run() {
             }
             else{
                 res.status(403).send({message:"Forbidden"})
-            }
-            
+            }          
         }
 
 
 
-        // Getting All product
-
+        // Getting All product to display
         app.get('/products', async (req, res) => {
             const products = await productCollection.find().toArray();
             res.send(products)
         });
 
-        // Single Product with details
+        // Getting a Single Product with details to display
         app.get('/products/:id', async (req, res) => {
             const productId = req.params.id;
-           
             const query = { _id: ObjectId(productId) };
             const singleProducts = await productCollection.findOne(query);
             res.send(singleProducts)
         });
-        // Post purchase
+
+        // Post purchase a product
         app.post('/purchase', async (req, res) => {
             const purchase = req.body;
             const result = await purchaseCollection.insertOne(purchase);
@@ -150,6 +148,7 @@ async function run() {
             res.send(result)
         });
 
+        //Getting a purchase by single user
         app.get('/purchase', verifyToken, async (req, res) => {
             const userEmail = req.query.user;
             const decodedEmail = req.decoded.email;
@@ -169,6 +168,7 @@ async function run() {
             const purchase= await purchaseCollection.findOne(query);
             res.send(purchase)
         });
+
         app.patch('/purchase/:id', async(req,res)=>{
             const id = req.params.id;
             const payment = req.body;
@@ -181,12 +181,19 @@ async function run() {
             }
             const result= await paymentsCollection.insertOne(payment);
             const updatedPurchase = await purchaseCollection.updateOne(filter,updateDoc);
-            sendPaymentConfirmationEmail(payment);
-            
+            sendPaymentConfirmationEmail(payment); 
             res.send(updateDoc);
+        });
 
-        })
-        // Update or insert new user
+        //Delete purchase product until user pay the products
+       app.delete('/purchase/:id',verifyToken, async (req, res) => {
+            const id = req.params.id;
+            const filter ={_id: ObjectId(id)}
+            const result = await purchaseCollection.deleteOne(filter);
+            res.send(result)
+        });
+
+        // Update or insert new user and provide a secret jwt
         app.put('/users/:email', async (req, res) => {
             const email = req.params.email;
             const user = req.body;
@@ -201,7 +208,6 @@ async function run() {
         })
 
         //Set admin role
-
         app.put('/users/admin/:email', verifyToken,verifyAdmin, async (req, res) => {
             const email = req.params.email;           
                 const filter = { email: email };
@@ -219,7 +225,7 @@ async function run() {
             const isAdmin = user.role === 'admin'
             res.send({admin: isAdmin})
         })
-
+        // Get all the added user
         app.get('/users', verifyToken, async (req, res) => {
             const users = await userCollection.find().toArray();
             res.send(users)
@@ -232,7 +238,7 @@ async function run() {
             res.send(result)
         });
 
-
+        //Delete a single product
         app.delete('/products/:id',verifyToken,verifyAdmin, async (req, res) => {
             const id = req.params.id;
             const filter ={_id: ObjectId(id)}
@@ -240,6 +246,7 @@ async function run() {
             res.send(result)
         });
 
+        //Integrated payment intent to stripe
         app.post('/create-payment-intent',async(req,res)=>{
             const {price}=req.body;
             const amount = price*100;
