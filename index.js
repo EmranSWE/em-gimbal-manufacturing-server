@@ -111,6 +111,7 @@ async function run() {
         const purchaseCollection = client.db('em-gimbal').collection('purchase');
         const userCollection = client.db('em-gimbal').collection('users');
         const paymentsCollection = client.db('em-gimbal').collection('paymnets');
+        const feedbackCollection = client.db('em-gimbal').collection('feedback');
 
 
         const  verifyAdmin= async(req,res,next)=> {
@@ -147,6 +148,23 @@ async function run() {
             sendPurchaseEmail(purchase)
             res.send(result)
         });
+         // Getting All payments to display
+         app.get('/payments', async (req, res) => {
+            const payments = await paymentsCollection.find().toArray();
+            res.send(payments)
+        });
+
+        //Update payment status
+        app.put('/purchase/:id', async(req,res)=>{
+            const id = req.params.id;  
+            const filter ={_id: ObjectId(id)};       
+                const updateDoc = {
+                    $set: { shipment: true },
+                };
+                const updatedPurchase = await purchaseCollection.updateOne(filter,updateDoc);
+                res.send(updatedPurchase)
+        });
+
 
         //Getting a purchase by single user
         app.get('/purchase', verifyToken, async (req, res) => {
@@ -245,6 +263,19 @@ async function run() {
             const result = await productCollection.deleteOne(filter);
             res.send(result)
         });
+
+        //Post Customer  Feedback
+        app.post('/feedback', async (req, res) => {
+            const feedback = req.body;
+            const result = await feedbackCollection.insertOne(feedback);
+            res.send(result)       
+        });
+        // Get all the customer feedback
+        app.get('/feedback',  async (req, res) => {
+            const feedback = await feedbackCollection.find().toArray();
+            res.send(feedback)
+        });
+
 
         //Integrated payment intent to stripe
         app.post('/create-payment-intent',async(req,res)=>{
