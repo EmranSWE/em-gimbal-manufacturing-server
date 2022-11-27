@@ -154,7 +154,7 @@ async function run() {
             res.send(payments)
         });
 
-        //Update payment status
+        //Update purchase shipment status
         app.put('/purchase/:id', async(req,res)=>{
             const id = req.params.id;  
             const filter ={_id: ObjectId(id)};       
@@ -164,6 +164,17 @@ async function run() {
                 const updatedPurchase = await purchaseCollection.updateOne(filter,updateDoc);
                 res.send(updatedPurchase)
         });
+
+            //Update Shipment status
+            app.put('/payments/:id', async(req,res)=>{
+                const id = req.params.id;  
+                const filter ={_id: ObjectId(id)};       
+                    const updateDoc = {
+                        $set: { shipment: true },
+                    };
+                    const updatedPayment = await paymentsCollection.updateOne(filter,updateDoc);
+                    res.send(updatedPayment)
+            });
 
 
         //Getting a purchase by single user
@@ -221,7 +232,7 @@ async function run() {
                 $set: user
             };
             const result = await userCollection.updateOne(filter, updateDoc, options);
-            const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
             res.send({ result, token })
         })
 
