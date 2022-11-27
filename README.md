@@ -1,5 +1,5 @@
 
-#  🏆 EM GIMBAL MANUFACTURER SERVER 🏆
+#  🏆 EM GIMBAL MANUFACTURER SERVER SIDE🏆
 
 EM gimbal manufaturer is a multi-functional responsive web application. Customers and admins can use it for multiple operations.
 [![Welcom To EM GIMBAL](https://img.shields.io/badge/Wecome-EM:Gimbal-brightgreen.svg?style=flat-square)](https://em-manufacturing.web.app/)
