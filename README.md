@@ -22,6 +22,10 @@ EM GIMBAL MANUFACTURER:-
 | Back-End    | NodeJs, ExpressJs, MongoDb,cors, dotenv, Stripe, Nodemailer, SendGrid,JWT|
 | Tools |imgbb, Firebase, Heroku, Git |
 
+## Documentation
+
+[Documentation](https://drive.google.com/file/d/1lCBJBdFBbbN-AO1szdUQkhqkeY4DN87X/view?usp=sharing)
+
 ## Feature of EM Gimbal Website
 #### Em gimbal manufacturer is a multi-functional website. It's a gimbal manufacturer's website. A gimbal is a tool that uses motors and intelligent sensors to support and stabilize a camera – meaning you can film silky smooth video footage while on the move. This website helps the manufacturer and its customers to connect and hassle-free communicate with each other. A customer can buy the products and the admin can see all the purchases. User-wise feature written below:
 
@@ -48,9 +52,7 @@ EM GIMBAL MANUFACTURER:-
 - And admin can add a new product: Dashboard> Add Product
 - An admin can manage Product: Dashboard> Manage Product
 
-## Documentation
 
-[Documentation](https://github.com/EmranSWE/easy-doctors-portal-client/blob/main/README.md)
 
 ## Screenshot of the application (Demo)
 ### Desktop / Laptop
